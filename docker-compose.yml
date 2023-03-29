@@ -7,6 +7,6 @@ services:
     restart: always
     container_name: chatgptslackbot
     env_file:
-      - ./variables.env
+      - .env
     ports:
       - "4000:4000"

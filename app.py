@@ -18,13 +18,30 @@ chatbot = Chatbot(**ChatGPTConfig)
 
 
 @app.event("app_mention")
-@app.event("message.im")
 def event_test(event, say):
     prompt = re.sub('\\s<@[^, ]*|^<@[^, ]*', '', event['text'])
     try:
         response = chatbot.ask(prompt)
         user = event['user']
         send = f"<@{user}> {response}"
+    except Exception as e:
+        print(e)
+        send = "We're experiencing exceptionally high demand. Please, try again."
+
+    # Get the `ts` value of the original message
+    original_message_ts = event["ts"]
+
+    # Use the `app.event` method to send a reply to the message thread
+    say(send, thread_ts=original_message_ts)
+
+
+@app.event("message")
+def dm(event, say):
+    prompt = re.sub('\\s<@[^, ]*|^<@[^, ]*', '', event['text'])
+    try:
+        if event["channel_type"] == "im":
+            response = chatbot.ask(prompt)
+            send = f"{response}"
     except Exception as e:
         print(e)
         send = "We're experiencing exceptionally high demand. Please, try again."

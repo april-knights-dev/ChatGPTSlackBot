@@ -18,7 +18,7 @@ chatbot = Chatbot(**ChatGPTConfig)
 
 
 @app.event("app_mention")
-@app.event("message")
+@app.event("message.im")
 def event_test(event, say):
     prompt = re.sub('\\s<@[^, ]*|^<@[^, ]*', '', event['text'])
     try:

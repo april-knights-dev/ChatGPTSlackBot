@@ -39,9 +39,11 @@ def event_test(event, say):
 def dm(event, say):
     prompt = re.sub('\\s<@[^, ]*|^<@[^, ]*', '', event['text'])
     try:
-        if event["channel_type"] == "im":
-            response = chatbot.ask(prompt)
-            send = f"{response}"
+        # Only respond to direct messages
+        if event["channel_type"] != "im":
+            return
+        response = chatbot.ask(prompt)
+        send = f"{response}"
     except Exception as e:
         print(e)
         send = "We're experiencing exceptionally high demand. Please, try again."
